@@ -549,6 +549,12 @@ plot(efBetaIce)
 ###NMDS
 library(vegan)
 library(ggplot2)
+# Assuming 'site_name' is the name of the column with site identifiers
+rownames(BetaVegCombo) <- BetaVegCombo$Plot.Year
+
+# Remove the site name column from the dataframe
+BetaVegCombo$Plot.Year <- NULL
+
 #betanew.dist<-vegdist(BetaVegCombo)
 
 betanew.mds<-metaMDS(BetaVegCombo, trace=FALSE)
