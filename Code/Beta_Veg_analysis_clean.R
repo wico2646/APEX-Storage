@@ -2,10 +2,10 @@
 
 ## bring in the data
 BetaVegCombo <- read_csv("Data/BetaVegCombo.csv") #vegetation data
-rownames(BetaVegCombo) <- BetaVegCombo[,1]
-BetaVegCombo = BetaVegCombo[,-1]
+#rownames(BetaVegCombo) <- BetaVegCombo[,1] #deprecated
+BetaVegCombo = BetaVegCombo[,-1] #ignore the first row for analyses
 BetaEnvNew <- read_csv("Data/BetaEnvNew.csv") #environmentals and flux
-
+BetaEnvNew$Year <- as.factor(BetaEnvNew$Year) #change year to a factor
 ## grab relevant packages
 library(vegan) #for veg community analysis
 library(MASS) #for several things
@@ -126,4 +126,12 @@ print(sc2adv)
 
 
 ### figs
+ALTfig <- ggplot(data = BetaEnvNew, aes(x = Thaw.Stage, y = -1*MaxThaw, fill = Year))+
+    geom_boxplot() +
+    geom_hline(yintercept = 0) +  #surface
+    geom_hline(yintercept=-46) +  #mean historical ALT
+    geom_hline(yintercept=-46+9.01, linetype="dashed") + #Sd+
+    geom_hline(yintercept=-46-9.01, linetype="dashed") + #Sd-
+    geom_hline(yintercept = -120) #probe length
+ALTfig
 
