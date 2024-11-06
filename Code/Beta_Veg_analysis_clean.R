@@ -66,7 +66,7 @@ lapply(betaSIMPER, FUN=function(x){x$overall}) #summarize percent dissimilarity 
 
 #NMDS fig
 
-##indicator species analysis
+##indicator species analyses
 multipatt(BetaVegCombo, BetaEnvNew$Thaw.Stage)
 indval <- multipatt(BetaVegCombo, BetaEnvNew$Thaw.Stage, control = how(nperm=999))
 summary.multipatt(indval, indvalcomp = TRUE)
@@ -108,7 +108,7 @@ print(scearly, sqrtIVt = 0.6)
 sc2early <- pruneindicators(scearly, At=0.8, Bt=0.2, verbose=TRUE)
 print(sc2early)
 
-#inter
+#intermediate
 scint <- indicators(X=BetaVegCombo, cluster=BetaEnvNew$Thaw.Stage, group=2,           
                   max.order = 3, verbose=TRUE,             
                   At=0.5, Bt=0.2, enableFixed = TRUE)
@@ -116,10 +116,14 @@ print(scint, sqrtIVt = 0.6)
 sc2int <- pruneindicators(scint, At=0.8, Bt=0.2, verbose=TRUE)
 print(sc2int)
 
-#adv
+#advanced
 scadv <- indicators(X=BetaVegCombo, cluster=BetaEnvNew$Thaw.Stage, group=3,           
                   max.order = 3, verbose=TRUE,             
                   At=0.5, Bt=0.2, enableFixed = TRUE)
 print(scadv, sqrtIVt = 0.6)
 sc2adv <- pruneindicators(scadv, At=0.8, Bt=0.2, verbose=TRUE)
 print(sc2adv)
+
+
+### figs
+
