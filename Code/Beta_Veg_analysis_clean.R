@@ -2,6 +2,8 @@
 
 ## bring in the data
 BetaVegCombo <- read_csv("Data/BetaVegCombo.csv") #vegetation data
+rownames(BetaVegCombo) <- BetaVegCombo[,1]
+BetaVegCombo = BetaVegCombo[,-1]
 BetaEnvNew <- read_csv("Data/BetaEnvNew.csv") #environmentals and flux
 
 ## grab relevant packages
@@ -49,7 +51,75 @@ summary(GPPmod)
 
 
 ## veg analysis
+
 #anosim
 anosimThaw<-anosim(BetaVegCombo, BetaEnvNew$Thaw.Stage, distance="bray")
 summary(anosimThaw)
 plot(anosimThaw)
+
+#simper
+betaSIMPER<-simper(BetaVegCombo, BetaEnvNew$Thaw.Stage)
+summary(betaSIMPER) #breakdown by species
+lapply(betaSIMPER, FUN=function(x){x$overall}) #summarize percent dissimilarity by group
+
+#ward's cluster analysis
+
+#NMDS fig
+
+##indicator species analysis
+multipatt(BetaVegCombo, BetaEnvNew$Thaw.Stage)
+indval <- multipatt(BetaVegCombo, BetaEnvNew$Thaw.Stage, control = how(nperm=999))
+summary.multipatt(indval, indvalcomp = TRUE)
+indval$sign
+
+indvalori <- multipatt(BetaVegCombo, BetaEnvNew$Thaw.Stage, duleg = TRUE,             
+                      control = how(nperm=999))
+summary.multipatt(indvalori, indvalcomp = TRUE)
+
+indvaloriward <- multipatt(BetaVegCombo, BetaEnvNew$WardCluster, duleg = TRUE,             
+                          control = how(nperm=999))
+summary(indvaloriward)
+
+#including species pairs
+BetaComb <- combinespecies(BetaVegCombo, max.order = 2)$XC
+dim(BetaComb)
+pairs <- multipatt(BetaComb, BetaEnvNew$Thaw.Stage, duleg = TRUE, 
+                 control = how(nperm=999))
+summary.multipatt(pairs, indvalcomp = TRUE)
+
+indvalspcomb <- multipatt(BetaVegCombo, BetaEnvNew$Thaw.Stage, duleg = TRUE, 
+                         control = how(nperm=999))
+summary.multipatt(indvalspcomb, indvalcomp = TRUE)
+
+#indicators function for pairs and trios
+#stable
+scstable <- indicators(X=BetaVegCombo, cluster=BetaEnvNew$Thaw.Stage, group=0,           
+                     max.order = 3, verbose=TRUE,             
+                     At=0.5, Bt=0.2, enableFixed = TRUE)
+print(scstable, sqrtIVt = 0.6)
+sc2stable <- pruneindicators(scstable, At=0.8, Bt=0.2, verbose=TRUE)
+print(sc2stable)
+
+#early
+scearly <- indicators(X=BetaVegCombo, cluster=BetaEnvNew$Thaw.Stage, group=1,           
+                    max.order = 3, verbose=TRUE,             
+                    At=0.5, Bt=0.2, enableFixed = TRUE)
+print(scearly, sqrtIVt = 0.6)
+sc2early <- pruneindicators(scearly, At=0.8, Bt=0.2, verbose=TRUE)
+print(sc2early)
+
+#inter
+scint <- indicators(X=BetaVegCombo, cluster=BetaEnvNew$Thaw.Stage, group=2,           
+                  max.order = 3, verbose=TRUE,             
+                  At=0.5, Bt=0.2, enableFixed = TRUE)
+print(scint, sqrtIVt = 0.6)
+sc2int <- pruneindicators(scint, At=0.8, Bt=0.2, verbose=TRUE)
+print(sc2int)
+
+#adv
+scadv <- indicators(X=BetaVegCombo, cluster=BetaEnvNew$Thaw.Stage, group=3,           
+                  max.order = 3, verbose=TRUE,             
+                  At=0.5, Bt=0.2, enableFixed = TRUE)
+print(scadv, sqrtIVt = 0.6)
+sc2adv <- pruneindicators(scadv, At=0.8, Bt=0.2, verbose=TRUE)
+print(sc2adv)
