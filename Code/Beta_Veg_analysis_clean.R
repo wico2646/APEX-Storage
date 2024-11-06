@@ -155,4 +155,25 @@ ggarrange(RichBox+theme_bw(), GramBox+theme_bw(), EriBox+theme_bw(), SphagBox+th
           labels = c("A", "B", "C", "D"),
           ncol = 2, nrow = 2)
 
+#methane fig
+CH4box <- ggplot(data = BetaEnvNew, aes(x = Thaw.Stage, y = JulyPeakMeth.umol.m2.min, fill = Year)) +
+    geom_boxplot()
+CH4box
 
+#CO2 figs
+#NEE
+NEEbox <- ggplot(data = BetaEnvNew, aes(x = Thaw.Stage, y = JulyNEE, fill = Year)) +
+    geom_boxplot()
+NEEbox
+#ER
+ERbox <- ggplot(data = BetaEnvNew, aes(x = Thaw.Stage, y = JulyER, fill = Year)) +
+    geom_boxplot()
+ERbox
+#GPP
+GPPbox <- ggplot(data = BetaEnvNew, aes(x = Thaw.Stage, y = GPP, fill = Year)) +
+    geom_boxplot()
+GPPbox
+#multipanel
+ggarrange(ERbox+theme_bw(), GPPbox+theme_bw(), NEEbox+theme_bw(),
+          labels = c("A", "B", "C"),
+          ncol = 3, nrow = 1)
