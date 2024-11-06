@@ -13,6 +13,7 @@ library(rcompanion) #for transformations and misc utility functions
 library(lme4) #for mixed effects models
 library(nlme) #for mixed effects models
 library(ggplot2) #for graphics
+library(ggpubr) #for graphics organization
 library(dplyr) #for organization
 library(pvclust) #for cluster analysis
 library(indicspecies) #for indicator species analysis
@@ -126,6 +127,7 @@ print(sc2adv)
 
 
 ### figs
+#ALT
 ALTfig <- ggplot(data = BetaEnvNew, aes(x = Thaw.Stage, y = -1*MaxThaw, fill = Year))+
     geom_boxplot() +
     geom_hline(yintercept = 0) +  #surface
@@ -134,4 +136,23 @@ ALTfig <- ggplot(data = BetaEnvNew, aes(x = Thaw.Stage, y = -1*MaxThaw, fill = Y
     geom_hline(yintercept=-46-9.01, linetype="dashed") + #Sd-
     geom_hline(yintercept = -120) #probe length
 ALTfig
+
+#Plant Functional Groups and Richness
+#ericoids
+EriBox<-ggplot(BetaEnvNew, aes(x=Thaw.Stage, y=Ericoids, fill=Year)) + geom_boxplot()+ylim(0,100)
+EriBox+theme_bw()
+#graminoids
+GramBox<-ggplot(BetaEnvNew, aes(x=Thaw.Stage, y=Graminoids, fill=Year)) + geom_boxplot()+ylim(0,100)
+GramBox+theme_bw()
+#sphagna
+SphagBox<-ggplot(BetaEnvNew, aes(x=Thaw.Stage, y=Sphagna, fill=Year)) + geom_boxplot()+ylim(0,100)
+SphagBox+theme_bw()
+#richness
+RichBox<-ggplot(BetaEnvNew, aes(x=Thaw.Stage, y=Richness, fill=Year)) + geom_boxplot()
+RichBox+theme_bw()
+#multipanel
+ggarrange(RichBox+theme_bw(), GramBox+theme_bw(), EriBox+theme_bw(), SphagBox+theme_bw(), 
+          labels = c("A", "B", "C", "D"),
+          ncol = 2, nrow = 2)
+
 
